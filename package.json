@@ -1,6 +1,6 @@
 {
   "name": "react-native-pinchzoom",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React-native pinch zoom view and double click ",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/cansufndk/React-native-pinchzoom.git"
-  } 
+  }
 }
