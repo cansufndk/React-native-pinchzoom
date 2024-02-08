@@ -1,32 +1,41 @@
-import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { View, StyleSheet, PanResponder, TouchableOpacity } from 'react-native';
+import React, {useState, useRef} from 'react';
+import {
+  View,
+  StyleSheet,
+  PanResponder,
+  TouchableOpacity,
+  GestureResponderEvent,
+  PanResponderGestureState
+} from 'react-native';
 
-const PinchZoomView = ({
-  scalable = true,
-  minScale = 0.5,
-  maxScale = 2,
-  style,
-  children
-}) => {
-  const [scale, setScale] = useState(1);
-  const [lastScale, setLastScale] = useState(1);
-  const [offsetX, setOffsetX] = useState(0);
-  const [offsetY, setOffsetY] = useState(0);
-  const [lastX, setLastX] = useState(0);
-  const [lastY, setLastY] = useState(0);
-  const [lastMovePinch, setLastMovePinch] = useState(false);
+interface PinchZoomViewProps {
+  scalable?: boolean;
+  minScale?: number;
+  maxScale?: number;
+  style?: any;
+  children?: React.ReactNode;
+}
+
+const PinchZoomView: React.FC<PinchZoomViewProps> = ({scalable = true, minScale = 0.5, maxScale = 2, style, children}) => {
+
+  const [scale, setScale] = useState<number>(1);
+  const [lastScale, setLastScale] = useState<number>(1);
+  const [offsetX, setOffsetX] = useState<number>(0);
+  const [offsetY, setOffsetY] = useState<number>(0);
+  const [lastX, setLastX] = useState<number>(0);
+  const [lastY, setLastY] = useState<number>(0);
+  const [lastMovePinch, setLastMovePinch] = useState<boolean>(false);
 
   const distantRef = useRef(150);
 
   const gestureHandlers = PanResponder.create({
-    onStartShouldSetPanResponder: (e, gestureState) => false,
-    onMoveShouldSetPanResponder: (e, gestureState) =>
+    onStartShouldSetPanResponder: (e: GestureResponderEvent, gestureState: PanResponderGestureState) => false,
+    onMoveShouldSetPanResponder: (e: GestureResponderEvent, gestureState: PanResponderGestureState) =>
       scalable &&
       (Math.abs(gestureState.dx) > 2 ||
         Math.abs(gestureState.dy) > 2 ||
         gestureState.numberActiveTouches === 2),
-    onPanResponderGrant: (e, gestureState) => {
+    onPanResponderGrant: (e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
       setLastX(0);
       setLastY(0);
       setLastMovePinch(false);
@@ -42,7 +51,7 @@ const PinchZoomView = ({
         distantRef.current = distant;
       }
     },
-    onPanResponderMove: (e, gestureState) => {
+    onPanResponderMove: (e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
       // zoom
       if (gestureState.numberActiveTouches === 2) {
         const dx = Math.abs(
@@ -76,7 +85,7 @@ const PinchZoomView = ({
         setLastY(newOffsetY);
       }
     },
-    onPanResponderRelease: (e, gestureState) => {
+    onPanResponderRelease: (e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
       setLastX(offsetX);
       setLastY(offsetY);
       setLastScale(scale);
@@ -86,7 +95,7 @@ const PinchZoomView = ({
   });
 
   const handleDoubleClick = () => {
-    // Eski haline döndür
+    // Restore to the original state
     setScale(1);
     setOffsetX(0);
     setOffsetY(0);
@@ -104,10 +113,10 @@ const PinchZoomView = ({
         style,
         {
           transform: [
-            { scaleX: scale },
-            { scaleY: scale },
-            { translateX: offsetX },
-            { translateY: offsetY },
+            {scaleX: scale},
+            {scaleY: scale},
+            {translateX: offsetX},
+            {translateY: offsetY},
           ],
         },
       ]}
@@ -117,14 +126,6 @@ const PinchZoomView = ({
       </TouchableOpacity>
     </View>
   );
-};
-
-PinchZoomView.propTypes = {
-  scalable: PropTypes.bool,
-  minScale: PropTypes.number,
-  maxScale: PropTypes.number,
-  style: PropTypes.object,
-  children: PropTypes.node,
 };
 
 const styles = StyleSheet.create({
