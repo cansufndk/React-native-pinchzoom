@@ -2,7 +2,7 @@
   "name": "react-native-pinchzoom",
   "version": "1.0.1",
   "description": "React-native pinch zoom view and double click ",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
